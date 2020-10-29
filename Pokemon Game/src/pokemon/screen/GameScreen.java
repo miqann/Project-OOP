@@ -18,9 +18,9 @@ public class GameScreen extends AbstractScreen {
 	
 	public GameScreen(Pokemon app) {
 		super(app);
-		RedStand = new Texture("res/Red.png");
+		RedStand = new Texture("Red.png");
 		batch = new SpriteBatch();
-		player = new Player(0, 0);
+		player = new Player(5, 5);
 		controller = new PlayerController(player);
 	}
 
@@ -49,7 +49,7 @@ public class GameScreen extends AbstractScreen {
 				player.getX()*Setting.SCALE_TITLE_SIZE
 				,player.getY()*Setting.SCALE_TITLE_SIZE
 				, Setting.SCALE_TITLE_SIZE
-				, Setting.SCALE_TITLE_SIZE*1.5f);
+				, Setting.SCALE_TITLE_SIZE);
 		batch.end();
 		
 	}
@@ -69,7 +69,6 @@ public class GameScreen extends AbstractScreen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(controller);
-		
 	}
 
 		
