@@ -8,11 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import aurelienribon.tweenengine.TweenManager;
 
-/**
- * @author hydrozoa
- */
 public class FadeOutTransition extends Transition {
-	
+
 	private Color color;
 	private Texture white;
 

@@ -2,11 +2,8 @@ package project.battle.animation;
 
 import aurelienribon.tweenengine.TweenAccessor;
 
-/**
- * @author hydrozoa
- */
 public class BattleSpriteAccessor implements TweenAccessor<BattleSprite> {
-	
+
 	public static final int X = 0;
 	public static final int Y = 1;
 	public static final int WIDTH = 2;
@@ -16,7 +13,7 @@ public class BattleSpriteAccessor implements TweenAccessor<BattleSprite> {
 
 	@Override
 	public int getValues(BattleSprite target, int tweenType, float[] returnValues) {
-		switch(tweenType) {
+		switch (tweenType) {
 			case X:
 				returnValues[0] = target.getX();
 				return 1;
@@ -35,8 +32,8 @@ public class BattleSpriteAccessor implements TweenAccessor<BattleSprite> {
 			case ROTATION:
 				returnValues[0] = target.getRotation();
 				return 1;
-			default: 
-				assert false; 
+			default:
+				assert false;
 				return -1;
 		}
 	}
@@ -44,27 +41,27 @@ public class BattleSpriteAccessor implements TweenAccessor<BattleSprite> {
 	@Override
 	public void setValues(BattleSprite target, int tweenType, float[] newValues) {
 		switch (tweenType) {
-        	case X: 
-        		target.setX(newValues[0]); 
-        		break;
-        	case Y: 
-        		target.setY(newValues[0]); 
-        		break;
-        	case WIDTH:
-        		target.setWidth(newValues[0]);
-        		break;
-        	case HEIGHT:
-        		target.setHeight(newValues[0]);
-        		break;
-        	case ALPHA:
-        		target.setAlpha(newValues[0]);
-        		break;
-        	case ROTATION:
-        		target.setRotation(newValues[0]);
-        		break;
-        	default: 
-        		assert false; 
-        		break;
+			case X:
+				target.setX(newValues[0]);
+				break;
+			case Y:
+				target.setY(newValues[0]);
+				break;
+			case WIDTH:
+				target.setWidth(newValues[0]);
+				break;
+			case HEIGHT:
+				target.setHeight(newValues[0]);
+				break;
+			case ALPHA:
+				target.setAlpha(newValues[0]);
+				break;
+			case ROTATION:
+				target.setRotation(newValues[0]);
+				break;
+			default:
+				assert false;
+				break;
 		}
 	}
 

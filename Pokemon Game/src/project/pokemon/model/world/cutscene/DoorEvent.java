@@ -3,22 +3,19 @@ package project.pokemon.model.world.cutscene;
 import project.pokemon.model.world.Door;
 import project.pokemon.model.world.Door.STATE;
 
-/**
- * @author hydrozoa
- */
 public class DoorEvent extends CutsceneEvent {
-	
+
 	private boolean opening;
 	private Door door;
-	
+
 	private boolean finished = false;
-	
+
 	public DoorEvent(Door door, boolean opening) {
 		this.door = door;
 		this.opening = opening;
-		
+
 	}
-	
+
 	@Override
 	public void begin(CutscenePlayer player) {
 		super.begin(player);
@@ -44,6 +41,7 @@ public class DoorEvent extends CutsceneEvent {
 	}
 
 	@Override
-	public void screenShow() {}
+	public void screenShow() {
+	}
 
 }

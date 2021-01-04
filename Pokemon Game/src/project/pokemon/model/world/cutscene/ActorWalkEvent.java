@@ -4,28 +4,25 @@ import project.pokemon.model.DIRECTION;
 import project.pokemon.model.actor.Actor;
 import project.pokemon.model.actor.Actor.MOVEMENT_STATE;
 
-/**
- * @author hydrozoa
- */
 public class ActorWalkEvent extends CutsceneEvent {
-	
+
 	private Actor a;
 	private DIRECTION dir;
-	
+
 	int targetX, targetY;
-	
+
 	private boolean finished = false;
-	
+
 	public ActorWalkEvent(Actor a, DIRECTION dir) {
 		this.a = a;
 		this.dir = dir;
 	}
-	
+
 	@Override
 	public void begin(CutscenePlayer player) {
 		super.begin(player);
-		targetX = a.getX()+dir.getDX();
-		targetY = a.getY()+dir.getDY();
+		targetX = a.getX() + dir.getDX();
+		targetY = a.getY() + dir.getDY();
 	}
 
 	@Override
@@ -47,6 +44,7 @@ public class ActorWalkEvent extends CutsceneEvent {
 	}
 
 	@Override
-	public void screenShow() {}
+	public void screenShow() {
+	}
 
 }

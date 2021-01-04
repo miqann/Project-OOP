@@ -15,44 +15,41 @@ import project.pokemon.model.world.cutscene.DoorEvent;
 import project.pokemon.model.world.cutscene.WaitEvent;
 import project.pokemon.worldloader.LTerrain;
 
-/**
- * @author hydrozoa
- */
 public class TeleportTile extends Tile {
-	
+
 	/* destination */
 	private String worldName;
 	private int x, y;
 	private DIRECTION facing;
-	
+
 	/* transition color */
 	private Color color;
 
 	public TeleportTile(LTerrain terrain, String worldName, int x, int y, DIRECTION facing, Color color) {
 		super(terrain);
 		this.worldName = worldName;
-		this.x= x;
-		this.y=y;
-		this.facing=facing;
-		this.color=color;
+		this.x = x;
+		this.y = y;
+		this.facing = facing;
+		this.color = color;
 	}
-	
+
 	@Override
 	public void actorStep(Actor a) {
-		
+
 	}
-	
+
 	@Override
 	public boolean actorBeforeStep(Actor a) {
-		//System.out.println("beforestep");
+		// System.out.println("beforestep");
 		if (a instanceof PlayerActor) {
-			PlayerActor playerActor = (PlayerActor) a; 
-			CutscenePlayer cutscenes = playerActor.getCutscenePlayer(); 
-			
+			PlayerActor playerActor = (PlayerActor) a;
+			CutscenePlayer cutscenes = playerActor.getCutscenePlayer();
+
 			if (this.getObject() != null) { // the teleport tile has an object
 				if (this.getObject() instanceof Door) { // entering af door
-					//System.out.println("GONNA STEP ON A DOOR");
-					Door door = (Door)this.getObject();
+					// System.out.println("GONNA STEP ON A DOOR");
+					Door door = (Door) this.getObject();
 					cutscenes.queueEvent(new DoorEvent(door, true));
 					cutscenes.queueEvent(new ActorWalkEvent(a, DIRECTION.NORTH));
 					cutscenes.queueEvent(new ActorVisibilityEvent(a, true));
@@ -63,13 +60,13 @@ public class TeleportTile extends Tile {
 					return false;
 				}
 			} else { // // the teleport tile does not have an object
-				System.out.println("Initiating teleport to "+worldName);
-				
+				System.out.println("Initiating teleport to " + worldName);
+
 				World nextWorld = cutscenes.getWorld(worldName);
-				
+
 				if (nextWorld.getMap().getTile(x, y).getObject() != null) { // the target tile has an object
 					WorldObject targetObj = nextWorld.getMap().getTile(x, y).getObject();
-					//System.out.println("Teleporting onto a "+targetObj.getClass().getName());
+					// System.out.println("Teleporting onto a "+targetObj.getClass().getName());
 					if (targetObj instanceof Door) {
 						Door targetDoor = (Door) targetObj;
 						cutscenes.queueEvent(new ActorWalkEvent(a, DIRECTION.SOUTH));

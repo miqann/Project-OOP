@@ -10,20 +10,18 @@ import com.badlogic.gdx.InputAdapter;
 
 /**
  * Controller that can move an Actor around.
- * 
- * @author hydrozoa
  */
 public class ActorMovementController extends InputAdapter {
-	
+
 	private Actor player;
-	
-	private boolean[] directionPress;		// which arrow-keys are pressed
-	private float[] directionPressTimer;	// how long have they been pressed for
-	
+
+	private boolean[] directionPress; // which arrow-keys are pressed
+	private float[] directionPressTimer; // how long have they been pressed for
+
 	private boolean isRunning = false;
-	
+
 	private float WALK_REFACE_THRESHOLD = 0.07f;
-	
+
 	public ActorMovementController(Actor p) {
 		this.player = p;
 		directionPress = new boolean[DIRECTION.values().length];
@@ -37,14 +35,14 @@ public class ActorMovementController extends InputAdapter {
 		directionPressTimer[DIRECTION.EAST.ordinal()] = 0f;
 		directionPressTimer[DIRECTION.WEST.ordinal()] = 0f;
 	}
-	
+
 	@Override
 	public boolean keyDown(int keycode) {
 		// enable running if appropiate
 		if (keycode == Keys.SHIFT_LEFT && player.getMovementMode() == MOVEMENT_MODE.WALKING) {
 			player.setNextMode(MOVEMENT_MODE.RUNNING);
 		}
-		
+
 		// update arrow key pressing
 		if (keycode == Keys.UP) {
 			directionPress[DIRECTION.NORTH.ordinal()] = true;
@@ -60,14 +58,14 @@ public class ActorMovementController extends InputAdapter {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean keyUp(int keycode) {
 		// disable running if appropiate
 		if (keycode == Keys.SHIFT_LEFT && player.getMovementMode() == MOVEMENT_MODE.RUNNING) {
 			player.setNextMode(MOVEMENT_MODE.WALKING);
 		}
-		
+
 		// update biking/not biking
 		if (keycode == Keys.F1) {
 			if (player.getMovementMode() == MOVEMENT_MODE.WALKING) {
@@ -76,8 +74,8 @@ public class ActorMovementController extends InputAdapter {
 				player.setNextMode(MOVEMENT_MODE.WALKING);
 			}
 		}
-		
-		// update arrow key pressing// update 
+
+		// update arrow key pressing// update
 		if (keycode == Keys.UP) {
 			releaseDirection(DIRECTION.NORTH);
 		}
@@ -92,7 +90,7 @@ public class ActorMovementController extends InputAdapter {
 		}
 		return false;
 	}
-	
+
 	public void update(float delta) {
 		if (directionPress[DIRECTION.NORTH.ordinal()]) {
 			updateDirection(DIRECTION.NORTH, delta);
@@ -111,7 +109,7 @@ public class ActorMovementController extends InputAdapter {
 			return;
 		}
 	}
-	
+
 	/**
 	 * Runs every frame, for each direction whose key is pressed.
 	 */
@@ -119,7 +117,7 @@ public class ActorMovementController extends InputAdapter {
 		directionPressTimer[dir.ordinal()] += delta;
 		considerMove(dir);
 	}
-	
+
 	/**
 	 * Runs when a key is released, argument is its corresponding direction.
 	 */
@@ -128,13 +126,13 @@ public class ActorMovementController extends InputAdapter {
 		considerReface(dir);
 		directionPressTimer[dir.ordinal()] = 0f;
 	}
-	
+
 	private void considerMove(DIRECTION dir) {
 		if (directionPressTimer[dir.ordinal()] > WALK_REFACE_THRESHOLD) {
 			player.move(dir);
 		}
 	}
-	
+
 	private void considerReface(DIRECTION dir) {
 		if (directionPressTimer[dir.ordinal()] < WALK_REFACE_THRESHOLD) {
 			player.reface(dir);

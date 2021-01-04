@@ -8,11 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import aurelienribon.tweenengine.TweenManager;
 
-/**
- * @author hydrozoa
- */
 public class FadeInTransition extends Transition {
-	
+
 	private Color color;
 	private Texture white;
 
@@ -23,9 +20,9 @@ public class FadeInTransition extends Transition {
 	}
 
 	@Override
-	public void render(float delta, SpriteBatch batch) {	
+	public void render(float delta, SpriteBatch batch) {
 		batch.begin();
-		batch.setColor(color.r, color.g, color.b, (1-getProgress()));
+		batch.setColor(color.r, color.g, color.b, (1 - getProgress()));
 		batch.draw(white, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.end();
 	}

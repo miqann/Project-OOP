@@ -13,28 +13,26 @@ import project.pokemon.model.actor.ActorBehavior;
 import project.pokemon.model.actor.ActorObserver;
 
 /**
- * Contains data about the game world, such as references to Actors, and WorldObjects.
- * Query the world from here.
- * 
- * @author hydrozoa
+ * Contains data about the game world, such as references to Actors, and
+ * WorldObjects. Query the world from here.
  */
 public class World implements ActorObserver {
-	
+
 	/** Unique name used to refer to this world */
 	private String name;
-	private int safeX;		// fly destination
+	private int safeX; // fly destination
 	private int safeY;
-	
+
 	private TileMap map;
 	private List<Actor> actors;
 	private HashMap<Actor, ActorBehavior> brains;
 	private List<WorldObject> objects;
-	
+
 	/**
-	 * @param name		Name of the world for internal model
-	 * @param width		Size of world in tiles
+	 * @param name   Name of the world for internal model
+	 * @param width  Size of world in tiles
 	 * @param height
-	 * @param safeX		Coord player can stand on, fly to
+	 * @param safeX  Coord player can stand on, fly to
 	 * @param safeY
 	 */
 	public World(String name, int width, int height, int safeX, int safeY) {
@@ -46,25 +44,25 @@ public class World implements ActorObserver {
 		brains = new HashMap<Actor, ActorBehavior>();
 		objects = new ArrayList<WorldObject>();
 	}
-	
+
 	public void addActor(Actor a) {
 		map.getTile(a.getX(), a.getY()).setActor(a);
 		actors.add(a);
 	}
-	
+
 	public void addActor(Actor a, ActorBehavior b) {
 		addActor(a);
 		brains.put(a, b);
 	}
-	
+
 	public void addObject(WorldObject o) {
 		for (GridPoint2 p : o.getTiles()) {
-			//System.out.println("\t Adding tile: "+p.x+", "+p.y);
-			map.getTile(o.getX()+p.x, o.getY()+p.y).setObject(o);
+			// System.out.println("\t Adding tile: "+p.x+", "+p.y);
+			map.getTile(o.getX() + p.x, o.getY() + p.y).setObject(o);
 		}
 		objects.add(o);
 	}
-	
+
 	public void removeActor(Actor actor) {
 		map.getTile(actor.getX(), actor.getY()).setActor(null);
 		actors.remove(actor);
@@ -72,7 +70,7 @@ public class World implements ActorObserver {
 			brains.remove(actor);
 		}
 	}
-	
+
 	public void update(float delta) {
 		for (Actor a : actors) {
 			if (brains.containsKey(a)) {
@@ -88,11 +86,11 @@ public class World implements ActorObserver {
 	public TileMap getMap() {
 		return map;
 	}
-	
+
 	public List<Actor> getActors() {
 		return actors;
 	}
-	
+
 	public List<WorldObject> getWorldObjects() {
 		return objects;
 	}
@@ -100,27 +98,27 @@ public class World implements ActorObserver {
 	public String getName() {
 		return name;
 	}
-	
+
 	public int getSafeX() {
 		return safeX;
 	}
-	
+
 	public int getSafeY() {
 		return safeY;
 	}
 
 	@Override
 	public void actorMoved(Actor a, DIRECTION direction, int x, int y) {
-		
+
 	}
 
 	@Override
 	public void attemptedMove(Actor a, DIRECTION direction) {
-		
+
 	}
 
 	@Override
 	public void actorBeforeMoved(Actor a, DIRECTION direction) {
-		
+
 	}
 }

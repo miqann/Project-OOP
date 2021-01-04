@@ -2,11 +2,8 @@ package project.battle.animation;
 
 import aurelienribon.tweenengine.TweenAccessor;
 
-/**
- * @author hydrozoa
- */
 public class BattleAnimationAccessor implements TweenAccessor<BattleAnimation> {
-	
+
 	public static final int PRIMARY_OFFSET_X = 0;
 	public static final int PRIMARY_OFFSET_Y = 1;
 	public static final int SECONDARY_OFFSET_X = 2;

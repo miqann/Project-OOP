@@ -6,8 +6,6 @@ import project.pokemon.model.YSortable;
 
 /**
  * Used for sorting objects by their Y-coord during rendering.
- * 
- * @author hydrozoa
  */
 public class WorldObjectYComparator implements Comparator<YSortable> {
 

@@ -7,24 +7,19 @@ import project.pokemon.ui.DetailedStatusBox;
 import project.pokemon.ui.HPBar;
 import project.pokemon.ui.StatusBox;
 
-/**
- * A BattleEvent where HP can be seen, depleting.
- * 
- * @author hydrozoa
- */
 public class HPAnimationEvent extends BattleEvent {
-	
+
 	private BATTLE_PARTY party;
-	
+
 	private int hpBefore;
 	private int hpAfter;
 	private int hpTotal;
 	private float duration;
-	
+
 	private BattleEventPlayer eventPlayer;
 	private float timer;
 	private boolean finished;
-	
+
 	public HPAnimationEvent(BATTLE_PARTY party, int hpBefore, int hpAfter, int hpTotal, float duration) {
 		this.party = party;
 		this.hpBefore = hpBefore;
@@ -41,17 +36,17 @@ public class HPAnimationEvent extends BattleEvent {
 		if (timer > duration) {
 			finished = true;
 		}
-		
-		float progress = timer/duration;
+
+		float progress = timer / duration;
 		float hpProgress = Interpolation.linear.apply(hpBefore, hpAfter, progress);
-		float hpProgressRelative = hpProgress/hpTotal;
-		
+		float hpProgressRelative = hpProgress / hpTotal;
+
 		HPBar hpbar = eventPlayer.getStatusBox(party).getHPBar();
 		hpbar.displayHPLeft(hpProgressRelative);
-		
+
 		StatusBox statusBox = eventPlayer.getStatusBox(party);
 		if (statusBox instanceof DetailedStatusBox) {
-			((DetailedStatusBox)statusBox).setHPText((int)hpProgress, hpTotal);
+			((DetailedStatusBox) statusBox).setHPText((int) hpProgress, hpTotal);
 		}
 	}
 

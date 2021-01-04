@@ -11,21 +11,19 @@ import project.pokemon.model.YSortable;
 
 /**
  * Object in the world. This can be a sign, a tree or some flowers.
- * 
- * @author hydrozoa
  */
 public class WorldObject implements YSortable {
-	
+
 	private float sizeX, sizeY;
 	private int x, y;
 	private List<GridPoint2> tiles;
 	private boolean walkable;
-	
+
 	private TextureRegion texture;
-	
+
 	private Animation animation;
 	private float animationTimer;
-	
+
 	public WorldObject(int x, int y, TextureRegion texture, float sizeX, float sizeY, GridPoint2[] tiles) {
 		this.x = x;
 		this.y = y;
@@ -38,8 +36,9 @@ public class WorldObject implements YSortable {
 		}
 		this.walkable = true;
 	}
-	
-	public WorldObject(int x, int y, boolean walkable, TextureRegion texture, float sizeX, float sizeY, GridPoint2 tile) {
+
+	public WorldObject(int x, int y, boolean walkable, TextureRegion texture, float sizeX, float sizeY,
+			GridPoint2 tile) {
 		this.x = x;
 		this.y = y;
 		this.texture = texture;
@@ -49,8 +48,9 @@ public class WorldObject implements YSortable {
 		this.tiles.add(tile);
 		this.walkable = walkable;
 	}
-	
-	public WorldObject(int x, int y, boolean walkable, TextureRegion texture, float sizeX, float sizeY, GridPoint2[] tiles) {
+
+	public WorldObject(int x, int y, boolean walkable, TextureRegion texture, float sizeX, float sizeY,
+			GridPoint2[] tiles) {
 		this.x = x;
 		this.y = y;
 		this.texture = texture;
@@ -62,8 +62,9 @@ public class WorldObject implements YSortable {
 		}
 		this.walkable = walkable;
 	}
-	
-	public WorldObject(int x, int y, boolean walkable, Animation animation, float sizeX, float sizeY, GridPoint2[] tiles) {
+
+	public WorldObject(int x, int y, boolean walkable, Animation animation, float sizeX, float sizeY,
+			GridPoint2[] tiles) {
 		this.x = x;
 		this.y = y;
 		this.animation = animation;
@@ -76,48 +77,49 @@ public class WorldObject implements YSortable {
 		}
 		this.walkable = walkable;
 	}
-	
+
 	public void update(float delta) {
 		if (animation != null) {
 			animationTimer += delta;
 		}
 	}
-	
+
 	public int getX() {
 		return x;
 	}
-	
+
 	public int getY() {
 		return y;
 	}
-	
+
 	public float getSizeX() {
 		return sizeX;
 	}
-	
+
 	public float getSizeY() {
 		return sizeY;
 	}
-	
+
 	public boolean isWalkable() {
 		return walkable;
 	}
-	
+
 	/**
 	 * Tests if this object occupies a specific tile.
-	 * @param x		world coords
+	 * 
+	 * @param x world coords
 	 * @param y
-	 * @return		true if the object occupies tile
+	 * @return true if the object occupies tile
 	 */
 	public boolean containsTile(int x, int y) {
 		for (GridPoint2 point : tiles) {
-			if (point.x+this.x == x && point.y+this.y == y) {
+			if (point.x + this.x == x && point.y + this.y == y) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public TextureRegion getSprite() {
 		if (texture != null) {
 			return texture;
@@ -125,7 +127,7 @@ public class WorldObject implements YSortable {
 			return animation.getKeyFrame(animationTimer);
 		}
 	}
-	
+
 	public List<GridPoint2> getTiles() {
 		return tiles;
 	}

@@ -8,23 +8,22 @@ import project.pokemon.model.DIRECTION;
 import project.pokemon.model.actor.Actor.MOVEMENT_STATE;
 
 /**
- * Behavior that will make an Actor walk around it's initial position randomly. 
- * 
- * @author hydrozoa
+ * Behavior that will make an Actor walk around it's initial position randomly.
  */
 public class LimitedWalkingBehavior extends ActorBehavior {
-	
+
 	private float moveIntervalMinimum;
 	private float moveIntervalMaximum;
 	private Random random;
-	
+
 	private float timer;
 	private float currentWaitTime;
-	
+
 	private GridPoint2 moveDelta;
 	private int limNorth, limSouth, limEast, limWest;
 
-	public LimitedWalkingBehavior(Actor actor, int limNorth, int limSouth, int limEast, int limWest, float moveIntervalMinimum, float moveIntervalMaximum, Random random) {
+	public LimitedWalkingBehavior(Actor actor, int limNorth, int limSouth, int limEast, int limWest,
+			float moveIntervalMinimum, float moveIntervalMaximum, Random random) {
 		super(actor);
 		this.limNorth = limNorth;
 		this.limSouth = limSouth;
@@ -47,7 +46,10 @@ public class LimitedWalkingBehavior extends ActorBehavior {
 		if (timer >= currentWaitTime) {
 			int directionIndex = random.nextInt(DIRECTION.values().length);
 			DIRECTION moveDirection = DIRECTION.values()[directionIndex];
-			if (this.moveDelta.x+moveDirection.getDX() > limEast || -(this.moveDelta.x+moveDirection.getDX()) > limWest || this.moveDelta.y+moveDirection.getDY() > limNorth || -(this.moveDelta.y+moveDirection.getDY()) > limSouth) {
+			if (this.moveDelta.x + moveDirection.getDX() > limEast
+					|| -(this.moveDelta.x + moveDirection.getDX()) > limWest
+					|| this.moveDelta.y + moveDirection.getDY() > limNorth
+					|| -(this.moveDelta.y + moveDirection.getDY()) > limSouth) {
 				getActor().reface(moveDirection);
 				currentWaitTime = calculateWaitTime();
 				timer = 0f;
@@ -58,12 +60,12 @@ public class LimitedWalkingBehavior extends ActorBehavior {
 				this.moveDelta.x += moveDirection.getDX();
 				this.moveDelta.y += moveDirection.getDY();
 			}
-			
+
 			currentWaitTime = calculateWaitTime();
 			timer = 0f;
 		}
 	}
-	
+
 	private float calculateWaitTime() {
 		return random.nextFloat() * (moveIntervalMaximum - moveIntervalMinimum) + moveIntervalMinimum;
 	}

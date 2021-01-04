@@ -13,36 +13,34 @@ import project.pokemon.ui.DialogueBox;
 import project.pokemon.ui.MoveSelectBox;
 import project.pokemon.ui.OptionBox;
 
-/**
- * @author hydrozoa
- */
 public class BattleScreenController extends InputAdapter {
-	
+
 	public enum STATE {
-		USE_NEXT_POKEMON, 	// Text displayed when Pokemon faints 
-		SELECT_ACTION,		// Moves, Items, Pokemon, Run
-		DEACTIVATED,		// Do nothing, display nothing
+		USE_NEXT_POKEMON, // Text displayed when Pokemon faints
+		SELECT_ACTION, // Moves, Items, Pokemon, Run
+		DEACTIVATED, // Do nothing, display nothing
 		;
 	}
-	
+
 	private STATE state = STATE.DEACTIVATED;
-	
+
 	private Queue<BattleEvent> queue;
-	
+
 	private Battle battle;
-	
+
 	private DialogueBox dialogue;
 	private OptionBox optionBox;
 	private MoveSelectBox moveSelect;
-	
-	public BattleScreenController(Battle battle, Queue<BattleEvent> queue, DialogueBox dialogue, MoveSelectBox options, OptionBox optionBox) {
+
+	public BattleScreenController(Battle battle, Queue<BattleEvent> queue, DialogueBox dialogue, MoveSelectBox options,
+			OptionBox optionBox) {
 		this.battle = battle;
 		this.queue = queue;
 		this.dialogue = dialogue;
 		this.moveSelect = options;
 		this.optionBox = optionBox;
 	}
-	
+
 	@Override
 	public boolean keyDown(int keycode) {
 		if (this.state == STATE.DEACTIVATED) {
@@ -55,9 +53,8 @@ public class BattleScreenController extends InputAdapter {
 				optionBox.moveDown();
 			} else if (keycode == Keys.X) {
 				if (optionBox.getIndex() == 0) { // YES selected
-					
-					
-					/* 
+
+					/*
 					 * WRONG
 					 */
 					for (int i = 0; i < battle.getPlayerTrainer().getTeamSize(); i++) {
@@ -100,11 +97,11 @@ public class BattleScreenController extends InputAdapter {
 		}
 		return false;
 	}
-	
+
 	public STATE getState() {
 		return state;
 	}
-	
+
 	public void update(float delta) {
 		if (isDisplayingNextDialogue() && dialogue.isFinished() && !optionBox.isVisible()) {
 			optionBox.clearChoices();
@@ -113,7 +110,7 @@ public class BattleScreenController extends InputAdapter {
 			optionBox.setVisible(true);
 		}
 	}
-	
+
 	/**
 	 * Displays the UI for a new turn
 	 */
@@ -130,7 +127,7 @@ public class BattleScreenController extends InputAdapter {
 		}
 		moveSelect.setVisible(true);
 	}
-	
+
 	/**
 	 * Displays UI for selecting a new Pokemon
 	 */
@@ -139,11 +136,11 @@ public class BattleScreenController extends InputAdapter {
 		dialogue.setVisible(true);
 		dialogue.animateText("Send out next pokemon?");
 	}
-	
+
 	public boolean isDisplayingNextDialogue() {
 		return this.state == STATE.USE_NEXT_POKEMON;
 	}
-	
+
 	private void endTurn() {
 		moveSelect.setVisible(false);
 		this.state = STATE.DEACTIVATED;

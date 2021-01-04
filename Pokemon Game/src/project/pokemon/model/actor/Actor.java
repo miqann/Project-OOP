@@ -10,44 +10,42 @@ import project.pokemon.model.world.World;
 import project.pokemon.model.world.WorldObject;
 import project.pokemon.util.AnimationSet;
 
-/**
- * @author hydrozoa
- */
 public class Actor implements YSortable {
-	
+
 	private World world;
 	private int x;
 	private int y;
 	private DIRECTION facing;
 	private boolean visible = true;
-	
+
 	private float worldX, worldY;
-	
+
 	// For callbacks to World
 	private ActorObserver observer;
-	
+
 	/* state specific */
 	private int srcX, srcY;
 	private int destX, destY;
 	private float animTimer;
 	private float REFACE_TIME = 0.1f;
 	private boolean noMoveNotifications = false;
-	
+
 	private float moveTimer;
 	private boolean moveRequestThisFrame;
-	
-	private float WALK_TIME_PER_TILE = 0.4f;	// seconds to spend on each tile when walking
-	private float RUN_TIME_PER_TILE = 0.25f;		// seconds to spend on each tile when running
-	private float BIKE_TIME_PER_TILE = 0.1f;	// seconds to spend on each tile when biking
-	
-	private MOVEMENT_STATE state;		// if the Actor is currently moving, standing or refacing
-	private MOVEMENT_MODE currentMode;	// if Actor is running or walking etc
-	private MOVEMENT_MODE nextMode;		// next time a movement is made, this mode will be used (used for running transition)
-	
+
+	private float WALK_TIME_PER_TILE = 0.4f; // seconds to spend on each tile when walking
+	private float RUN_TIME_PER_TILE = 0.25f; // seconds to spend on each tile when running
+	private float BIKE_TIME_PER_TILE = 0.1f; // seconds to spend on each tile when biking
+
+	private MOVEMENT_STATE state; // if the Actor is currently moving, standing or refacing
+	private MOVEMENT_MODE currentMode; // if Actor is running or walking etc
+	private MOVEMENT_MODE nextMode; // next time a movement is made, this mode will be used (used for running
+									// transition)
+
 	private AnimationSet animations;
-	
+
 	private Dialogue dialogue;
-	
+
 	public Actor(World world, int x, int y, AnimationSet animations) {
 		this.observer = world;
 		this.world = world;
@@ -61,39 +59,33 @@ public class Actor implements YSortable {
 		this.state = MOVEMENT_STATE.STILL;
 		this.facing = DIRECTION.SOUTH;
 	}
-	
+
 	public enum MOVEMENT_STATE {
-		MOVING,
-		STILL,
-		REFACING,
-		;
+		MOVING, STILL, REFACING,;
 	}
-	
+
 	public enum MOVEMENT_MODE {
-		WALKING,
-		BIKING,
-		RUNNING,
-		;
+		WALKING, BIKING, RUNNING,;
 	}
-	
+
 	public void update(float delta) {
 		if (state == MOVEMENT_STATE.MOVING) {
 			animTimer += delta;
 			moveTimer += delta;
-			
+
 			float timePerTile;
 			switch (currentMode) {
-			case BIKING:
-				timePerTile = BIKE_TIME_PER_TILE;
-				break;
-			case RUNNING:
-				timePerTile = RUN_TIME_PER_TILE;
-				break;
-			case WALKING:
-			default:
-				timePerTile = WALK_TIME_PER_TILE;
+				case BIKING:
+					timePerTile = BIKE_TIME_PER_TILE;
+					break;
+				case RUNNING:
+					timePerTile = RUN_TIME_PER_TILE;
+					break;
+				case WALKING:
+				default:
+					timePerTile = WALK_TIME_PER_TILE;
 			}
-			
+
 			worldX = Interpolation.linear.apply(srcX, destX, animTimer / timePerTile);
 			worldY = Interpolation.linear.apply(srcY, destY, animTimer / timePerTile);
 			if (animTimer > timePerTile) {
@@ -118,7 +110,7 @@ public class Actor implements YSortable {
 		}
 		moveRequestThisFrame = false;
 	}
-	
+
 	public boolean reface(DIRECTION dir) {
 		if (state != MOVEMENT_STATE.STILL) { // can only reface when standing
 			return false;
@@ -131,10 +123,10 @@ public class Actor implements YSortable {
 		animTimer = 0f;
 		return true;
 	}
-	
+
 	/**
-	 * Changes the Players facing direction, without the walk-frame animation.
-	 * This is used when loading maps, and in dialogue.
+	 * Changes the Players facing direction, without the walk-frame animation. This
+	 * is used when loading maps, and in dialogue.
 	 */
 	public boolean refaceWithoutAnimation(DIRECTION dir) {
 		if (state != MOVEMENT_STATE.STILL) { // can only reface when standing
@@ -143,11 +135,12 @@ public class Actor implements YSortable {
 		this.facing = dir;
 		return true;
 	}
-	
+
 	/**
 	 * Initializes a move. If you want to move an Actor, use this method.
-	 * @param dir	Direction to move
-	 * @return		If the move was started
+	 * 
+	 * @param dir Direction to move
+	 * @return If the move was started
 	 */
 	public boolean move(DIRECTION dir) {
 		if (state == MOVEMENT_STATE.MOVING) {
@@ -157,29 +150,30 @@ public class Actor implements YSortable {
 			return false;
 		}
 		// edge of world test
-		if (x+dir.getDX() >= world.getMap().getWidth() || x+dir.getDX() < 0 || y+dir.getDY() >= world.getMap().getHeight() || y+dir.getDY() < 0) {
+		if (x + dir.getDX() >= world.getMap().getWidth() || x + dir.getDX() < 0
+				|| y + dir.getDY() >= world.getMap().getHeight() || y + dir.getDY() < 0) {
 			reface(dir);
 			return false;
 		}
 		// unwalkable tile test
-		if (!world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).walkable()) {
+		if (!world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).walkable()) {
 			reface(dir);
 			return false;
 		}
 		// actor test
-		if (world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).getActor() != null) {
+		if (world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).getActor() != null) {
 			reface(dir);
 			return false;
 		}
 		// object test
-		if (world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).getObject() != null) {
-			WorldObject o = world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).getObject();
+		if (world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).getObject() != null) {
+			WorldObject o = world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).getObject();
 			if (!o.isWalkable()) {
 				reface(dir);
 				return false;
 			}
 		}
-		if (world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).actorBeforeStep(this) == true) {
+		if (world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).actorBeforeStep(this) == true) {
 			initializeMove(dir);
 			world.getMap().getTile(x, y).setActor(null);
 			x += dir.getDX();
@@ -189,10 +183,10 @@ public class Actor implements YSortable {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Same as #move() but doesn't notify receiving Tile.
-	 * Doesn't obey Tile#actorBeforeStep and Tile#actorStep
+	 * Same as #move() but doesn't notify receiving Tile. Doesn't obey
+	 * Tile#actorBeforeStep and Tile#actorStep
 	 */
 	public boolean moveWithoutNotifications(DIRECTION dir) {
 		noMoveNotifications = true;
@@ -203,23 +197,24 @@ public class Actor implements YSortable {
 			return false;
 		}
 		// edge of world test
-		if (x+dir.getDX() >= world.getMap().getWidth() || x+dir.getDX() < 0 || y+dir.getDY() >= world.getMap().getHeight() || y+dir.getDY() < 0) {
+		if (x + dir.getDX() >= world.getMap().getWidth() || x + dir.getDX() < 0
+				|| y + dir.getDY() >= world.getMap().getHeight() || y + dir.getDY() < 0) {
 			reface(dir);
 			return false;
 		}
 		// unwalkable tile test
-		if (!world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).walkable()) {
+		if (!world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).walkable()) {
 			reface(dir);
 			return false;
 		}
 		// actor test
-		if (world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).getActor() != null) {
+		if (world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).getActor() != null) {
 			reface(dir);
 			return false;
 		}
 		// object test
-		if (world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).getObject() != null) {
-			WorldObject o = world.getMap().getTile(x+dir.getDX(), y+dir.getDY()).getObject();
+		if (world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).getObject() != null) {
+			WorldObject o = world.getMap().getTile(x + dir.getDX(), y + dir.getDY()).getObject();
 			if (!o.isWalkable()) {
 				reface(dir);
 				return false;
@@ -232,20 +227,20 @@ public class Actor implements YSortable {
 		world.getMap().getTile(x, y).setActor(this);
 		return true;
 	}
-	
+
 	private void initializeMove(DIRECTION dir) {
 		this.facing = dir;
 		this.srcX = x;
 		this.srcY = y;
-		this.destX = x+dir.getDX();
-		this.destY = y+dir.getDY();
+		this.destX = x + dir.getDX();
+		this.destY = y + dir.getDY();
 		this.worldX = x;
 		this.worldY = y;
 		animTimer = 0f;
 		state = MOVEMENT_STATE.MOVING;
 		this.currentMode = this.nextMode;
 	}
-	
+
 	private void finishMove() {
 		state = MOVEMENT_STATE.STILL;
 		this.worldX = destX;
@@ -260,7 +255,7 @@ public class Actor implements YSortable {
 			noMoveNotifications = false;
 		}
 	}
-	
+
 	/**
 	 * Changes the Players position internally.
 	 */
@@ -286,7 +281,7 @@ public class Actor implements YSortable {
 	public float getWorldY() {
 		return worldY;
 	}
-	
+
 	public TextureRegion getSprite() {
 		if (currentMode == MOVEMENT_MODE.WALKING) {
 			if (state == MOVEMENT_STATE.MOVING) {
@@ -325,50 +320,51 @@ public class Actor implements YSortable {
 	public float getSizeY() {
 		return 1.5f;
 	}
-	
+
 	public void changeWorld(World world, int newX, int newY) {
 		this.world.removeActor(this);
 		this.setCoords(newX, newY);
 		this.world = world;
 		this.world.addActor(this);
 	}
-	
+
 	public MOVEMENT_STATE getMovementState() {
 		return state;
 	}
-	
+
 	/**
 	 * Changes the Actors mode of movement, starting from next movement initiation
+	 * 
 	 * @param newMode
 	 */
 	public void setNextMode(MOVEMENT_MODE newMode) {
 		this.nextMode = newMode;
 	}
-	
+
 	public MOVEMENT_MODE getMovementMode() {
 		return currentMode;
 	}
-	
+
 	public DIRECTION getFacing() {
 		return facing;
 	}
-	
+
 	public void setDialogue(Dialogue dialogue) {
 		this.dialogue = dialogue;
 	}
-	
+
 	public Dialogue getDialogue() {
 		return dialogue;
 	}
-	
+
 	public World getWorld() {
 		return world;
 	}
-	
+
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
-	
+
 	public boolean isVisible() {
 		return visible;
 	}

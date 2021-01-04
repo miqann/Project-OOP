@@ -5,11 +5,9 @@ import project.battle.animation.BattleAnimation;
 
 /**
  * A BattleEvent where a BattleAnimation is played.
- * 
- * @author hydrozoa
  */
 public class AnimationBattleEvent extends BattleEvent {
-	
+
 	private BATTLE_PARTY primary;
 	private BattleAnimation animation;
 
@@ -23,7 +21,7 @@ public class AnimationBattleEvent extends BattleEvent {
 		super.begin(player);
 		player.playBattleAnimation(animation, primary);
 	}
-	
+
 	@Override
 	public void update(float delta) {
 		animation.update(delta);

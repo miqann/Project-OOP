@@ -4,13 +4,10 @@ import com.badlogic.gdx.Screen;
 
 import project.pokemon.PokemonGame;
 
-/**
- * @author hydrozoa
- */
 public abstract class AbstractScreen implements Screen {
-	
+
 	private PokemonGame app;
-	
+
 	public AbstractScreen(PokemonGame app) {
 		this.app = app;
 	}
@@ -23,7 +20,7 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public abstract void pause();
-	
+
 	public abstract void update(float delta);
 
 	@Override
@@ -37,7 +34,7 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public abstract void show();
-	
+
 	public PokemonGame getApp() {
 		return app;
 	}

@@ -35,47 +35,44 @@ import project.pokemon.ui.MoveSelectBox;
 import project.pokemon.ui.OptionBox;
 import project.pokemon.ui.StatusBox;
 
-/**
- * @author hydrozoa
- */
 public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
-	
+
 	/* Controller */
 	private BattleScreenController controller;
-	
+
 	/* Event system */
 	private BattleEvent currentEvent;
 	private Queue<BattleEvent> queue = new ArrayDeque<BattleEvent>();
-	
+
 	/* Model */
 	private Battle battle;
-	
+
 	private BATTLE_PARTY animationPrimary;
 	private BattleAnimation battleAnimation = null;
-	
+
 	/* View */
 	private BitmapFont text = new BitmapFont();
-	
+
 	private Viewport gameViewport;
-	
+
 	private SpriteBatch batch;
 	private BattleRenderer battleRenderer;
 	private BattleDebugRenderer battleDebugRenderer;
 	private EventQueueRenderer eventRenderer;
-	
+
 	/* UI */
 	private Stage uiStage;
 	private Table dialogueRoot;
 	private DialogueBox dialogueBox;
 	private OptionBox optionBox;
-	
+
 	private Table moveSelectRoot;
-	private MoveSelectBox moveSelectBox; 
-	
+	private MoveSelectBox moveSelectBox;
+
 	private Table statusBoxRoot;
 	private DetailedStatusBox playerStatus;
 	private StatusBox opponentStatus;
-	
+
 	/* DEBUG */
 	private boolean uiDebug = false;
 	private boolean battleDebug = true;
@@ -84,46 +81,44 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 		super(app);
 		gameViewport = new ScreenViewport();
 		batch = new SpriteBatch();
-		
+
 		Texture bulbasaur = app.getAssetManager().get("res/graphics/pokemon/bulbasaur.png", Texture.class);
 		Texture slowpoke = app.getAssetManager().get("res/graphics/pokemon/slowpoke.png", Texture.class);
-		
+
 		Trainer playerTrainer = new Trainer(Pokemon.generatePokemon("Bulba", bulbasaur, app.getMoveDatabase()));
 		playerTrainer.addPokemon(Pokemon.generatePokemon("Golem", slowpoke, app.getMoveDatabase()));
-		
-		battle = new Battle(
-				playerTrainer,
-				Pokemon.generatePokemon("Grimer", slowpoke, app.getMoveDatabase()));
+
+		battle = new Battle(playerTrainer, Pokemon.generatePokemon("Grimer", slowpoke, app.getMoveDatabase()));
 		battle.setEventPlayer(this);
-		
+
 		animationPrimary = BATTLE_PARTY.PLAYER;
-		
+
 		battleRenderer = new BattleRenderer(app.getAssetManager(), app.getOverlayShader());
 		battleDebugRenderer = new BattleDebugRenderer(battleRenderer);
 		eventRenderer = new EventQueueRenderer(app.getSkin(), queue);
-		
+
 		initUI();
-		
+
 		controller = new BattleScreenController(battle, queue, dialogueBox, moveSelectBox, optionBox);
-		
+
 		battle.beginBattle();
 	}
 
 	@Override
 	public void dispose() {
-		
+
 	}
 
 	@Override
 	public void hide() {
-		
+
 	}
 
 	@Override
 	public void pause() {
-		
+
 	}
-	
+
 	@Override
 	public void update(float delta) {
 		/* DEBUG */
@@ -134,11 +129,11 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 		if (Gdx.input.isKeyJustPressed(Keys.F10)) {
 			battleDebug = !battleDebug;
 		}
-		
+
 		while (currentEvent == null || currentEvent.finished()) { // no active event
 			if (queue.peek() == null) { // no event queued up
 				currentEvent = null;
-				
+
 				if (battle.getState() == STATE.SELECT_NEW_POKEMON) {
 					if (controller.getState() != BattleScreenController.STATE.USE_NEXT_POKEMON) {
 						controller.displayNextDialogue();
@@ -153,16 +148,16 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 					getApp().setScreen(getApp().getGameScreen());
 				}
 				break;
-			} else {					// event queued up
+			} else { // event queued up
 				currentEvent = queue.poll();
 				currentEvent.begin(this);
 			}
 		}
-		
+
 		if (currentEvent != null) {
 			currentEvent.update(delta);
 		}
-		
+
 		controller.update(delta);
 		uiStage.act(); // update ui
 	}
@@ -176,86 +171,82 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 			eventRenderer.render(batch, currentEvent);
 		}
 		batch.end();
-		
+
 		if (battleDebug) {
 			battleDebugRenderer.render();
 		}
-		
+
 		uiStage.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
-		uiStage.getViewport().update(
-				(int)(Gdx.graphics.getWidth()/Settings.SCALE_UI), 
-				(int)(Gdx.graphics.getHeight()/Settings.SCALE_UI),
-				true);
+		uiStage.getViewport().update((int) (Gdx.graphics.getWidth() / Settings.SCALE_UI),
+				(int) (Gdx.graphics.getHeight() / Settings.SCALE_UI), true);
 		gameViewport.update(width, height);
 	}
 
 	@Override
 	public void resume() {
-		
+
 	}
 
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(controller);
 	}
-	
+
 	private void initUI() {
 		/* ROOT UI STAGE */
 		uiStage = new Stage(new ScreenViewport());
-		uiStage.getViewport().update(
-				(int)(Gdx.graphics.getWidth()/Settings.SCALE_UI), 
-				(int)(Gdx.graphics.getHeight()/Settings.SCALE_UI),
-				true);
+		uiStage.getViewport().update((int) (Gdx.graphics.getWidth() / Settings.SCALE_UI),
+				(int) (Gdx.graphics.getHeight() / Settings.SCALE_UI), true);
 		uiStage.setDebugAll(false);
-		
+
 		/* STATUS BOXES */
 		statusBoxRoot = new Table();
 		statusBoxRoot.setFillParent(true);
 		uiStage.addActor(statusBoxRoot);
-		
+
 		playerStatus = new DetailedStatusBox(getApp().getSkin());
 		playerStatus.setText(battle.getPlayerPokemon().getName());
-		
+
 		opponentStatus = new StatusBox(getApp().getSkin());
 		opponentStatus.setText(battle.getOpponentPokemon().getName());
-		
+
 		statusBoxRoot.add(playerStatus).expand().align(Align.left);
 		statusBoxRoot.add(opponentStatus).expand().align(Align.right);
-		
+
 		/* MOVE SELECTION BOX */
 		moveSelectRoot = new Table();
 		moveSelectRoot.setFillParent(true);
 		uiStage.addActor(moveSelectRoot);
-		
+
 		moveSelectBox = new MoveSelectBox(getApp().getSkin());
 		moveSelectBox.setVisible(false);
-		
+
 		moveSelectRoot.add(moveSelectBox).expand().align(Align.bottom);
-		
+
 		/* OPTION BOX */
 		dialogueRoot = new Table();
 		dialogueRoot.setFillParent(true);
 		uiStage.addActor(dialogueRoot);
-		
+
 		optionBox = new OptionBox(getApp().getSkin());
 		optionBox.setVisible(false);
-		
+
 		/* DIALOGUE BOX */
 		dialogueBox = new DialogueBox(getApp().getSkin());
 		dialogueBox.setVisible(false);
-		
+
 		Table dialogTable = new Table();
 		dialogTable.add(optionBox).expand().align(Align.right).space(8f).row();
 		dialogTable.add(dialogueBox).expand().align(Align.bottom).space(8f);
-		
+
 		dialogueRoot.add(dialogTable).expand().align(Align.bottom);
 	}
-	
+
 	public StatusBox getStatus(BATTLE_PARTY hpbar) {
 		if (hpbar == BATTLE_PARTY.PLAYER) {
 			return playerStatus;
@@ -275,12 +266,12 @@ public class BattleScreen extends AbstractScreen implements BattleEventPlayer {
 	public DialogueBox getDialogueBox() {
 		return dialogueBox;
 	}
-	
+
 	@Override
 	public BattleAnimation getBattleAnimation() {
 		return battleAnimation;
 	}
-	
+
 	@Override
 	public TweenManager getTweenManager() {
 		return getApp().getTweenManager();

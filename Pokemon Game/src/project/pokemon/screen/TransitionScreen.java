@@ -10,30 +10,26 @@ import project.pokemon.util.Action;
 
 /**
  * Used for transitions between screens.
- * 
- * @author hydrozoa 
  */
 public class TransitionScreen extends AbstractScreen {
-	
+
 	private AbstractScreen from;
 	private AbstractScreen to;
-	
+
 	private Transition outTransition;
 	private Transition inTransition;
-	
+
 	private Action action;
 
 	private SpriteBatch batch;
 	private Viewport viewport;
-	
+
 	private TRANSITION_STATE state;
-	
+
 	private enum TRANSITION_STATE {
-		OUT,
-		IN,
-		;
+		OUT, IN,;
 	}
-	
+
 	public TransitionScreen(PokemonGame app) {
 		super(app);
 		batch = new SpriteBatch();
@@ -42,19 +38,19 @@ public class TransitionScreen extends AbstractScreen {
 
 	@Override
 	public void dispose() {
-		
+
 	}
 
 	@Override
 	public void hide() {
-		
+
 	}
 
 	@Override
 	public void pause() {
-		
+
 	}
-	
+
 	@Override
 	public void update(float delta) {
 		if (state == TRANSITION_STATE.OUT) {
@@ -76,12 +72,12 @@ public class TransitionScreen extends AbstractScreen {
 	public void render(float delta) {
 		if (state == TRANSITION_STATE.OUT) {
 			from.render(delta);
-			
+
 			viewport.apply();
 			outTransition.render(delta, batch);
 		} else if (state == TRANSITION_STATE.IN) {
 			to.render(delta);
-			
+
 			viewport.apply();
 			inTransition.render(delta, batch);
 		}
@@ -96,14 +92,14 @@ public class TransitionScreen extends AbstractScreen {
 
 	@Override
 	public void resume() {
-		
+
 	}
 
 	@Override
 	public void show() {
-		
+
 	}
-	
+
 	public void startTransition(AbstractScreen from, AbstractScreen to, Transition out, Transition in, Action action) {
 		this.from = from;
 		this.to = to;

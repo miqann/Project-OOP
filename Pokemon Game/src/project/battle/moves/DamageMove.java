@@ -15,11 +15,6 @@ import project.battle.event.HPAnimationEvent;
 import project.battle.event.TextEvent;
 import project.pokemon.model.Pokemon;
 
-/**
- * We're going to do some real important shit around here Morty.
- * 
- * @author hydrozoa
- */
 public class DamageMove extends Move {
 
 	public DamageMove(MoveSpecification spec, Class<? extends BattleAnimation> clazz) {
@@ -30,8 +25,9 @@ public class DamageMove extends Move {
 	public BattleAnimation animation() {
 		try {
 			return animationClass.getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException	| NoSuchMethodException | SecurityException e) {
-			System.err.println(animationClass.getName()+" does not seem to have a constructor");
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			System.err.println(animationClass.getName() + " does not seem to have a constructor");
 			e.printStackTrace();
 			Gdx.app.exit();
 		}
@@ -47,29 +43,26 @@ public class DamageMove extends Move {
 	public boolean isDamaging() {
 		return true;
 	}
-	
+
 	@Override
-	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party, BattleEventQueuer broadcaster) {
+	public int useMove(BattleMechanics mechanics, Pokemon user, Pokemon target, BATTLE_PARTY party,
+			BattleEventQueuer broadcaster) {
 		int hpBefore = target.getCurrentHitpoints();
 		int damage = super.useMove(mechanics, user, target, party, broadcaster);
-		
+
 		/* Broadcast animations */
 		broadcaster.queueEvent(new AnimationBattleEvent(party, animation()));
-		
+
 		/* Broadcast blinking */
 		broadcaster.queueEvent(new AnimationBattleEvent(BATTLE_PARTY.getOpposite(party), new BlinkingAnimation(1f, 5)));
-		
-		//float hpPercentage = ((float)target.getCurrentHitpoints())/(float)target.getStat(STAT.HITPOINTS);
-		
+
+		// float hpPercentage =
+		// ((float)target.getCurrentHitpoints())/(float)target.getStat(STAT.HITPOINTS);
+
 		/* Broadcast HP change */
-		broadcaster.queueEvent(
-				new HPAnimationEvent(
-						BATTLE_PARTY.getOpposite(party), 
-						hpBefore,
-						target.getCurrentHitpoints(), 
-						target.getStat(STAT.HITPOINTS), 
-						0.5f));
-		
+		broadcaster.queueEvent(new HPAnimationEvent(BATTLE_PARTY.getOpposite(party), hpBefore,
+				target.getCurrentHitpoints(), target.getStat(STAT.HITPOINTS), 0.5f));
+
 		if (mechanics.hasMessage()) {
 			broadcaster.queueEvent(new TextEvent(mechanics.getMessage(), 0.5f));
 		}

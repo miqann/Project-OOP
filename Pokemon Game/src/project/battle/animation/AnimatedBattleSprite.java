@@ -3,9 +3,6 @@ package project.battle.animation;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-/**
- * @author hydrozoa
- */
 public class AnimatedBattleSprite extends BattleSprite {
 
 	private Animation animation;
