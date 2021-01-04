@@ -1,14 +1,16 @@
-package pokemon.screen;
+package com.hydrozoa.pokemon.screen;
 
 import com.badlogic.gdx.Screen;
+import com.hydrozoa.pokemon.PokemonGame;
 
-import pokemon.Pokemon;
-
+/**
+ * @author hydrozoa
+ */
 public abstract class AbstractScreen implements Screen {
-
-	private Pokemon app;
-
-	public AbstractScreen(Pokemon app) {
+	
+	private PokemonGame app;
+	
+	public AbstractScreen(PokemonGame app) {
 		this.app = app;
 	}
 
@@ -20,6 +22,8 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public abstract void pause();
+	
+	public abstract void update(float delta);
 
 	@Override
 	public abstract void render(float delta);
@@ -32,8 +36,9 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public abstract void show();
-
-	public Pokemon getApp() {
+	
+	public PokemonGame getApp() {
 		return app;
 	}
+
 }
