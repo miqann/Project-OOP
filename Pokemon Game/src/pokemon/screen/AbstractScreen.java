@@ -5,12 +5,13 @@ import com.badlogic.gdx.Screen;
 import pokemon.Pokemon;
 
 public abstract class AbstractScreen implements Screen {
-	
+
 	private Pokemon app;
-	
+
 	public AbstractScreen(Pokemon app) {
 		this.app = app;
 	}
+
 	@Override
 	public abstract void dispose();
 
@@ -25,13 +26,13 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public abstract void resize(int width, int height);
-	
+
 	@Override
 	public abstract void resume();
 
 	@Override
 	public abstract void show();
-	
+
 	public Pokemon getApp() {
 		return app;
 	}
