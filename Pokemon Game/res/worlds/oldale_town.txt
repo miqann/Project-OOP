@@ -93,3 +93,7 @@ addDoor	14	15
 
 
 addObj	9	16	BIG_TREE
+addTree 4	2
+
+teleport		10	0	GRASS	littleroot_town		12	21	NORTH	WHITE
+teleport		9	0	GRASS	littleroot_town		13	21	NORTH	WHITE
