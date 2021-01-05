@@ -15,6 +15,7 @@ public class musicStuff {
 				Clip clip = AudioSystem.getClip();
 				clip.open(audioInput);
 				clip.start();
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
 			} else {
 				System.out.println("Error!");
 			}
