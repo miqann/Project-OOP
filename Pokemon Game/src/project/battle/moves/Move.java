@@ -6,7 +6,7 @@ import project.battle.animation.BattleAnimation;
 import project.battle.event.BattleEventQueuer;
 import project.pokemon.model.Pokemon;
 
-/
+
 public abstract class Move {
 	
 	protected MoveSpecification spec;

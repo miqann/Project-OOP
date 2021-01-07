@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="Pokemon Game/src"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/gdx-backend-lwjgl-natives.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/gdx-backend-lwjgl.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/gdx-freetype-natives.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/gdx-freetype.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/gdx-natives.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/gdx-sources.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/gdx-tools.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/gdx.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/tween-engine-api-sources.jar"/>
+	<classpathentry kind="lib" path="Pokemon Game/lib/tween-engine-api.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
